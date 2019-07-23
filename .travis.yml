@@ -16,7 +16,7 @@ install:
   - conda info -a
   # Install conda dependencies
   - conda env create -q -f environment.yml
-  - conda activate crypto
+  - source activate crypto
 
 script:
   - python -m unittest
