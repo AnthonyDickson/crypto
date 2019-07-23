@@ -69,8 +69,8 @@ def print_attack_summary(attack: AttackI, cipher_type: Type[CipherI], ciphertext
 def main(key=1):
     """A demonstration of the Caesar cipher."""
     cc = CaesarCipher()
-    key = Key(key)
-    message = input('Enter a message to encrypt: ')
+    key = Key(key % 26)
+    message = Message(input('Enter a message to encrypt: '))
     ciphertext = cc.encrypt(message, key)
 
     while not CaesarCipher.is_valid(message):

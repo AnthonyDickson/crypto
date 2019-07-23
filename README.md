@@ -40,9 +40,9 @@ See the [roadmap section](#roadmap) for what has been implemented so far.
     3.  If you get an error such as:
         ```
         Traceback (most recent call last):
-          File "demo/caesar_cipher.py", line 3, in <module>
-            from ciphers.caesar import CaesarCipher
-        ModuleNotFoundError: No module named 'ciphers'
+          File "samples/caesar_cipher.py", line 7, in <module>
+            from crypto.ciphers.caesar import CaesarCipher
+        ModuleNotFoundError: No module named 'crypto'
         ```
         then add the current directory (should be the root directory of this repo) 
         to the python path as such:
