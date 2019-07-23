@@ -67,12 +67,11 @@ class LetterFrequencyAttack(BruteForceAttackI):
         # product with the reference letter frequencies has most similar
         # distribution to the reference letter frequencies.
         # noinspection PyTypeChecker
-        k: int = np.argmax(letter_frequencies.dot(self.letter_frequencies))
-
+        k = Key(str(np.argmax(letter_frequencies.dot(self.letter_frequencies))))
         # Reconstruct the original message using the guessed key.
         m: Message = cipher.decrypt(c, Key(k))
 
-        return m, Key(k)
+        return m, k
 
 
 class DictionaryAttack(BruteForceAttackI):
