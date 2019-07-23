@@ -1,11 +1,10 @@
 import unittest
 
-from crypto.ciphers.caesar import CaesarCipher
+from crypto.ciphers.caesar import CaesarCipher, LetterFrequencyAttack
 from crypto.types import Key
 
 
 class CaeserCipherTests(unittest.TestCase):
-
     def test_input_validation(self):
         m = 'Invalid message 1234567890!@#$%^&*()'
 
@@ -25,6 +24,15 @@ class CaeserCipherTests(unittest.TestCase):
 
         self.assertSetEqual(expected, actual,
                             msg='The key space for CaesarCipher is incorrect.')
+
+    def test_can_set_key(self):
+        cc = CaesarCipher(shift_by=3)
+        expected_key = Key(3)
+        actual_key = cc.key()
+
+        self.assertEqual(expected_key, actual_key, 'Key is not the same as the one it was set to!\n'
+                                                   'Expected \'%s\', but instead got \'%s\'' % (
+                         expected_key, actual_key))
 
     def test_generates_valid_ciphertext(self):
         cc = CaesarCipher()
@@ -71,6 +79,19 @@ class CaeserCipherTests(unittest.TestCase):
 
         for k in cc.key_space():
             self.assertEqual(D(E(m, k), k), m, msg='The cipher is not symmetric for the key \'%s\'!' % k)
+
+    def test_attack_generates_valid_output(self):
+        m = 'HELLO WORLD'
+        k = Key(5)
+
+        cc = CaesarCipher()
+        c = cc.encrypt(m, k)
+
+        attack = LetterFrequencyAttack()
+        message, key = attack.from_cipher(c)
+
+        self.assertIn(key, CaesarCipher.KEY_SPACE, 'Attack method generated an invalid key \'%s\'.' % key)
+        self.assertTrue(CaesarCipher.is_valid(message), 'Attack method generated an invalid message \'%s\'' % message)
 
 
 if __name__ == '__main__':
