@@ -1,6 +1,7 @@
 # Crypto
 
 This repository contains implementations of some well-known ciphers.
+See the [roadmap section](#roadmap) for what has been implemented so far.
 
 ## Getting Started
 1.  Set up the python environment using conda:
@@ -46,3 +47,37 @@ This repository contains implementations of some well-known ciphers.
         ```bash
         $ export PYTHONPATH=${PYTHONPATH}:${PWD}
         ```
+
+## Roadmap
+- [ ] Caesar Cipher
+    - [x] Encryption
+    - [x] Decryption
+    - [ ] Attacks
+        - [ ] Ciphertext only
+        - [ ] Chosen Plaintext
+        - [ ] Known Plaintext
+        - [ ] Bruteforce
+- [ ] Vigenère Cipher
+    - [ ] Encryption
+    - [ ] Decryption
+    - [ ] Attacks
+        - [ ] Ciphertext Only
+        - [ ] Chosen Plaintext
+        - [ ] Known Plaintext
+        - [ ] Bruteforce
+- [ ] One Time Pad Cipher
+    - [ ] Encryption
+    - [ ] Decryption
+    - [ ] Attacks
+        - [ ] Ciphertext Only
+        - [ ] Chosen Plaintext
+        - [ ] Known Plaintext
+        - [ ] Bruteforce
+- [ ] Stream Cipher   
+    - [ ] Encryption
+    - [ ] Decryption
+    - [ ] Attacks
+        - [ ] Ciphertext Only
+        - [ ] Chosen Plaintext
+        - [ ] Known Plaintext
+        - [ ] Bruteforce
