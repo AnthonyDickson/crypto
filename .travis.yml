@@ -19,9 +19,11 @@ install:
   # Install conda dependencies
   - conda env create -q -f environment.yml
   - source activate crypto
-
 script:
   - coverage run -m tests
-
 after_success:
   - codecov
+notifications:
+  email:
+    on_success: change
+    on_failure: change
