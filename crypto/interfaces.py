@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, Set
+from typing import Optional, Set, Tuple
 
 Key = str
 KeySpace = Set[Key]
@@ -66,10 +66,11 @@ class CipherI(EncrypterI, DecrypterI, ABC):
 class AttackerI:
     """The interface for an attacker that tries to break an encryption scheme."""
 
-    def from_cipher(self, c: CipherText) -> Message:
-        """Decode a message from the ciphertext alone.
+    def from_cipher(self, c: CipherText) -> Tuple[Message, Optional[Key]]:
+        """Decrypt a message from the ciphertext alone.
 
         :param c: The ciphertext.
-        :return: The attacker's guess at the original message.
+        :return: The attacker's guess at the original message and the possibly
+                 the key.
         """
         raise NotImplementedError

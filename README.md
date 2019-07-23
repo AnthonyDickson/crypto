@@ -23,7 +23,7 @@ This repository contains implementations of some well-known ciphers.
     1.  Instead of typing out a message, you can pipe a text file into a demo 
         to use its contents as the message for the cipher to encrypt:
         ```bash
-        $ python demos/caesar_cipher.py < sample_messages/helloworld.txt
+        $ python demos/caesar_cipher.py < sample_messages/hello_world.txt
         Enter a message to encrypt: 
         Message: HELLO WORLD
         ...

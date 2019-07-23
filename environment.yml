@@ -1,5 +1,6 @@
 name: crypto
 dependencies:
+  - numpy
   - pip
   - pip:
       - plac
