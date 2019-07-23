@@ -1,6 +1,6 @@
-from typing import Set
+from typing import NewType, Set, Union
 
-Key = str
-KeySpace = Set[Key]
-CipherText = str
-Message = str
+Key = NewType('Key', Union[int, str])
+KeySpace = NewType('KeySpace', Set[Key])
+CipherText = NewType('CipherText', str)
+Message = NewType('Message', str)

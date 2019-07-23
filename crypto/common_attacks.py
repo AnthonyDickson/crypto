@@ -54,7 +54,7 @@ class LetterFrequencyAttack(BruteForceAttackI):
             k = int(k)
 
             for char in c:
-                if not char.isspace():
+                if char.isalpha():
                     # All characters are uppercase, so treat the first
                     # uppercase letter as zero.
                     char_i = (ord(char) - ord('A') - k) % 26

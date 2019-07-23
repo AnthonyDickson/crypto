@@ -1,12 +1,12 @@
 import unittest
 
 from crypto.ciphers.caesar import CaesarCipher
-from crypto.types import Key
+from crypto.types import Key, CipherText, Message
 
 
 class CaeserCipherTests(unittest.TestCase):
     def test_input_validation(self):
-        m = 'Invalid message 1234567890!@#$%^&*()'
+        m = Message('Invalid message 1234567890!@#$%^&*()')
 
         cc = CaesarCipher()
 
@@ -32,13 +32,13 @@ class CaeserCipherTests(unittest.TestCase):
 
         self.assertEqual(expected_key, actual_key, 'Key is not the same as the one it was set to!\n'
                                                    'Expected \'%s\', but instead got \'%s\'' % (
-                         expected_key, actual_key))
+                             expected_key, actual_key))
 
     def test_generates_valid_ciphertext(self):
         cc = CaesarCipher()
 
         k = Key(3)
-        m = 'HELLO WORLD'
+        m = Message('HELLO WORLD')
 
         c = cc.encrypt(m, k)
 
@@ -48,7 +48,7 @@ class CaeserCipherTests(unittest.TestCase):
         cc = CaesarCipher()
 
         k = Key(3)
-        c = 'HELLO WORLD'
+        c = CipherText('HELLO WORLD')
 
         m = cc.decrypt(c, k)
 
@@ -59,7 +59,7 @@ class CaeserCipherTests(unittest.TestCase):
         ciphertext.
         """
         k = Key(0)
-        m = 'HELLO WORLD'
+        m = Message('HELLO WORLD')
 
         cc = CaesarCipher()
         E = cc.encrypt
@@ -71,7 +71,7 @@ class CaeserCipherTests(unittest.TestCase):
         """Ensure that decrypting the cipher text with the same key that it was
         encrypted with produces the original message.
         """
-        m = 'HELLO WORLD'
+        m = Message('HELLO WORLD')
 
         cc = CaesarCipher()
         E = cc.encrypt
@@ -79,6 +79,7 @@ class CaeserCipherTests(unittest.TestCase):
 
         for k in cc.key_space():
             self.assertEqual(D(E(m, k), k), m, msg='The cipher is not symmetric for the key \'%s\'!' % k)
+
 
 if __name__ == '__main__':
     unittest.main()

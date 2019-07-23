@@ -5,7 +5,7 @@ from crypto.types import Key, CipherText, Message
 
 
 class CaesarCipher(CipherABC):
-    KEY_SPACE = set(Key(k) for k in range(0, 26))
+    KEY_SPACE = set(k for k in range(0, 26))
 
     def __init__(self, shift_by=0):
         self._key = Key(shift_by)
@@ -29,11 +29,9 @@ class CaesarCipher(CipherABC):
                                          'or spaces.'
 
         if not k:
-            k = int(self.key())
-        else:
-            k = int(k)
+            k = self.key()
 
-        c: CipherText = ''
+        c = CipherText('')
 
         for char in m:
             if char.isspace():
@@ -49,11 +47,9 @@ class CaesarCipher(CipherABC):
                                          'or spaces.'
 
         if not k:
-            k = int(self.key())
-        else:
-            k = int(k)
+            k = self.key()
 
-        m: Message = ''
+        m = Message('')
 
         for char in c:
             if char.isspace():
