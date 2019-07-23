@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/eight0153/crypto.svg?token=mBA1uqs7VwsypGYiKPgD&branch=master)](https://travis-ci.com/eight0153/crypto)
+[![codecov](https://codecov.io/gh/eight0153/crypto/branch/master/graph/badge.svg?token=bNppdfp3Ql)](https://codecov.io/gh/eight0153/crypto)
 # Crypto
 
 This repository contains implementations of some well-known ciphers.
