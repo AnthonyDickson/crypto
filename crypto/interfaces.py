@@ -1,12 +1,13 @@
-from abc import ABC
+from abc import abstractmethod
 from typing import Tuple, Optional
 
-from crypto.types import Key, KeySpace, CipherText, Message
+from crypto.types import Key, CipherText, Message
 
 
 class EncrypterI:
     """Interface for an encryption algorithm"""
 
+    @abstractmethod
     def encrypt(self, m: Message, k: Optional[Key] = None) -> CipherText:
         """Encrypt a message.
 
@@ -19,8 +20,9 @@ class EncrypterI:
 
 
 class DecrypterI:
-    """Intferface for a decryption algorithm."""
+    """Interface for a decryption algorithm."""
 
+    @abstractmethod
     def decrypt(self, c: CipherText, k: Optional[Key] = None) -> Message:
         """Decrypt a ciphertext.
 
@@ -32,30 +34,10 @@ class DecrypterI:
         raise NotImplementedError
 
 
-class Cipher(EncrypterI, DecrypterI, ABC):
-    """The abstract base class for a cipher."""
-
-    # Override this!
-    KEY_SPACE: KeySpace = []
-
-    def key(self) -> Key:
-        """Get the key for the encoder.
-
-        :return: The key the encoder uses for encoding messages.
-        """
-        raise NotImplementedError
-
-    def key_space(self) -> KeySpace:
-        """Get the key space for a cipher.
-
-        :return: The key space for the cipher.
-        """
-        return self.KEY_SPACE
-
-
 class AttackI:
     """The interface for an attacker that tries to break an encryption scheme."""
 
+    @abstractmethod
     def from_cipher(self, c: CipherText) -> Tuple[Message, Optional[Key]]:
         """Decrypt a message from the ciphertext alone.
 

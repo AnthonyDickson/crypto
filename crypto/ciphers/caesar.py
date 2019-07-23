@@ -2,11 +2,12 @@ from typing import Optional, Tuple, Union
 
 import numpy as np
 
-from crypto.interfaces import AttackI, Cipher
+from crypto.abcs import CipherABC
+from crypto.interfaces import AttackI
 from crypto.types import Key, CipherText, Message
 
 
-class CaesarCipher(Cipher):
+class CaesarCipher(CipherABC):
     KEY_SPACE = set(Key(k) for k in range(0, 26))
 
     def __init__(self, shift_by=0):
@@ -123,6 +124,7 @@ class LetterFrequencyAttack(AttackI):
         # The column of the letter frequencies matrix that maximises the dot
         # product with the reference letter frequencies has most similar
         # distribution to the reference letter frequencies.
+        # noinspection PyTypeChecker
         k: int = np.argmax(letter_frequencies.dot(self.letter_frequencies))
 
         # Reconstruct the original message using the guessed key.
