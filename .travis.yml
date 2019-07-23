@@ -17,6 +17,11 @@ install:
   # Install conda dependencies
   - conda env create -q -f environment.yml
   - source activate crypto
+  # Set up python path
+  - export PYTHONPATH=${PYTHONPATH}:${PWD}
 
 script:
-  - python -m unittest
+  - coverage run tests
+
+after_success:
+  - codecov

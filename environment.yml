@@ -3,4 +3,5 @@ dependencies:
   - numpy
   - pip
   - pip:
+      - codecov
       - plac
