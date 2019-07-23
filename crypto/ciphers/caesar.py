@@ -1,21 +1,19 @@
-from typing import Optional, Union, Tuple
+from typing import Optional, Tuple, Union
 
 import numpy as np
 
-from crypto.interfaces import Key, Message, CipherText, CipherI, KeySpace, AttackerI
+from crypto.interfaces import AttackI, Cipher
+from crypto.types import Key, CipherText, Message
 
 
-class CaesarCipher(CipherI):
+class CaesarCipher(Cipher):
     KEY_SPACE = set(Key(k) for k in range(0, 26))
 
     def __init__(self, shift_by=0):
         self._key = Key(shift_by)
 
-    def get_key(self) -> Key:
+    def key(self) -> Key:
         return self._key
-
-    def get_key_space(self) -> KeySpace:
-        return CaesarCipher.KEY_SPACE
 
     @staticmethod
     def is_valid(x: Union[Message, CipherText]) -> bool:
@@ -33,7 +31,7 @@ class CaesarCipher(CipherI):
                                          'or spaces.'
 
         if not k:
-            k = int(self.get_key())
+            k = int(self.key())
         else:
             k = int(k)
 
@@ -53,7 +51,7 @@ class CaesarCipher(CipherI):
                                          'or spaces.'
 
         if not k:
-            k = int(self.get_key())
+            k = int(self.key())
         else:
             k = int(k)
 
@@ -68,15 +66,13 @@ class CaesarCipher(CipherI):
         return m
 
 
-class EnglishLetterFrequencyAttacker(AttackerI):
-    """A simple attacker that guesses the key used by a Caesar cipher to encrypt
+class LetterFrequencyAttack(AttackI):
+    """A simple attack that guesses the key used by a Caesar cipher to encrypt
     a given ciphertext using approximate relative letter frequencies found in
     the English language.
     """
 
     def __init__(self):
-        """Create a new brute force attacer instance."""
-
         # Column vector of letter frequencies from a-z.
         self.letter_frequencies = np.array([[0.08167],
                                             [0.01492],

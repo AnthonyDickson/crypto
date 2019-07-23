@@ -3,8 +3,9 @@ from typing import Iterable, Union
 import numpy as np
 import plac
 
-from ciphers.caesar import CaesarCipher, EnglishLetterFrequencyAttacker
-from crypto.interfaces import Key, AttackerI, CipherText, Message
+from crypto.ciphers.caesar import CaesarCipher, LetterFrequencyAttack
+from crypto.interfaces import AttackI
+from crypto.types import Key, CipherText, Message
 
 
 # TODO: refactor generalisable summary stuff to own package/file
@@ -24,8 +25,8 @@ def letter_distribution(m: str) -> Iterable[float]:
     return dist
 
 
-def print_attack_summary(attacker: AttackerI, ciphertext: CipherText, message: Message):
-    estimated_message, estimated_key = attacker.from_cipher(ciphertext)
+def print_attack_summary(attack: AttackI, ciphertext: CipherText, message: Message):
+    estimated_message, estimated_key = attack.from_cipher(ciphertext)
     exact_match = estimated_message == message
     pos_similarity = sum(1 if c1 == c2 else 0 for c1, c2 in zip(message, estimated_message)) / len(message)
     dist_similarity = cosine_similarity(letter_distribution(message),
@@ -64,7 +65,7 @@ def main(key=1):
     print('Ciphertext: %s' % ciphertext)
     print()
 
-    attacker = EnglishLetterFrequencyAttacker()
+    attacker = LetterFrequencyAttack()
     print_attack_summary(attacker, ciphertext, message)
 
 

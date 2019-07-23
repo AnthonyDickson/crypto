@@ -1,10 +1,7 @@
 from abc import ABC
-from typing import Optional, Set, Tuple
+from typing import Tuple, Optional
 
-Key = str
-KeySpace = Set[Key]
-CipherText = str
-Message = str
+from crypto.types import Key, KeySpace, CipherText, Message
 
 
 class EncrypterI:
@@ -35,35 +32,28 @@ class DecrypterI:
         raise NotImplementedError
 
 
-class CipherI(EncrypterI, DecrypterI, ABC):
-    """The interface for a cipher."""
+class Cipher(EncrypterI, DecrypterI, ABC):
+    """The abstract base class for a cipher."""
 
-    def get_key(self) -> Key:
+    # Override this!
+    KEY_SPACE: KeySpace = []
+
+    def key(self) -> Key:
         """Get the key for the encoder.
 
         :return: The key the encoder uses for encoding messages.
         """
         raise NotImplementedError
 
-    def get_key_space(self) -> KeySpace:
+    def key_space(self) -> KeySpace:
         """Get the key space for a cipher.
 
         :return: The key space for the cipher.
         """
-        raise NotImplementedError
-
-    @property
-    def k(self):
-        """The key for a cipher. An alias for `get_key()`."""
-        return self.get_key()
-
-    @property
-    def K(self):
-        """The key space for a cipher. An alias for `get_key_space()`."""
-        return self.get_key_space()
+        return self.KEY_SPACE
 
 
-class AttackerI:
+class AttackI:
     """The interface for an attacker that tries to break an encryption scheme."""
 
     def from_cipher(self, c: CipherText) -> Tuple[Message, Optional[Key]]:

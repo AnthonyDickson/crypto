@@ -1,7 +1,7 @@
 import unittest
 
-from ciphers.caesar import CaesarCipher
-from crypto.interfaces import Key
+from crypto.ciphers.caesar import CaesarCipher
+from crypto.types import Key
 
 
 class CaeserCipherTests(unittest.TestCase):
@@ -11,7 +11,20 @@ class CaeserCipherTests(unittest.TestCase):
 
         cc = CaesarCipher()
 
-        self.assertRaises(AssertionError, cc.encrypt, m, Key(0))
+        try:
+            cc.encrypt(m, Key(0))
+        except AssertionError:
+            # AssertionError correctly raised for invalid input, all good!
+            return
+
+        self.fail('Encrypt method should throw an error for incorrectly formatted input.')
+
+    def test_keyspace_is_correct(self):
+        expected = set(Key(k) for k in range(26))
+        actual = CaesarCipher.KEY_SPACE
+
+        self.assertSetEqual(expected, actual,
+                            msg='The key space for CaesarCipher is incorrect.')
 
     def test_generates_valid_ciphertext(self):
         cc = CaesarCipher()
@@ -43,11 +56,12 @@ class CaeserCipherTests(unittest.TestCase):
         cc = CaesarCipher()
         E = cc.encrypt
 
-        self.assertEqual(E(m, k), m) # shift amount is zero so there should be no change
+        self.assertEqual(E(m, k), m,
+                         msg='Encrypting a message with a shift of zero should produce the original message!')
 
     def test_is_symmetric(self):
-        """Ensure that decoding the cipher text with the same key that it was
-        encoded with produces the original message.
+        """Ensure that decrypting the cipher text with the same key that it was
+        encrypted with produces the original message.
         """
         m = 'HELLO WORLD'
 
@@ -55,8 +69,8 @@ class CaeserCipherTests(unittest.TestCase):
         E = cc.encrypt
         D = cc.decrypt
 
-        for k in cc.K:
-            self.assertEqual(D(E(m, k), k), m)
+        for k in cc.key_space():
+            self.assertEqual(D(E(m, k), k), m, msg='The cipher is not symmetric for the key \'%s\'!' % k)
 
 
 if __name__ == '__main__':
