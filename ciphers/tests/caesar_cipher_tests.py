@@ -11,7 +11,7 @@ class CaeserCipherTests(unittest.TestCase):
 
         cc = CaesarCipher()
 
-        self.assertRaises(AssertionError, cc.encode, m, Key(0))
+        self.assertRaises(AssertionError, cc.encrypt, m, Key(0))
 
     def test_generates_valid_ciphertext(self):
         cc = CaesarCipher()
@@ -19,7 +19,7 @@ class CaeserCipherTests(unittest.TestCase):
         k = Key(3)
         m = 'HELLO WORLD'
 
-        c = cc.encode(m, k)
+        c = cc.encrypt(m, k)
 
         self.assertTrue(CaesarCipher.is_valid(c), '\'%s\' is not a valid ciphertext!' % c)
 
@@ -29,7 +29,7 @@ class CaeserCipherTests(unittest.TestCase):
         k = Key(3)
         c = 'HELLO WORLD'
 
-        m = cc.decode(c, k)
+        m = cc.decrypt(c, k)
 
         self.assertTrue(CaesarCipher.is_valid(m), '\'%s\' is not valid plaintext!' % c)
 
@@ -41,9 +41,9 @@ class CaeserCipherTests(unittest.TestCase):
         m = 'HELLO WORLD'
 
         cc = CaesarCipher()
-        E = cc.encode
+        E = cc.encrypt
 
-        self.assertEqual(m, E(m, k)) # shift amount is zero so there should be no change
+        self.assertEqual(E(m, k), m) # shift amount is zero so there should be no change
 
     def test_is_symmetric(self):
         """Ensure that decoding the cipher text with the same key that it was
@@ -52,11 +52,11 @@ class CaeserCipherTests(unittest.TestCase):
         m = 'HELLO WORLD'
 
         cc = CaesarCipher()
-        E = cc.encode
-        D = cc.decode
+        E = cc.encrypt
+        D = cc.decrypt
 
         for k in cc.K:
-            self.assertEqual(m, D(E(m, k), k))
+            self.assertEqual(D(E(m, k), k), m)
 
 
 if __name__ == '__main__':

@@ -24,7 +24,7 @@ class CaesarCipher(CipherI):
         return all((char.isalpha() and char.isupper()) or char.isspace()
                    for char in x)
 
-    def encode(self, m: Message, k: Optional[Key] = None) -> CipherText:
+    def encrypt(self, m: Message, k: Optional[Key] = None) -> CipherText:
         assert CaesarCipher.is_valid(m), 'Invalid message.' \
                                  '\nMessage must be all uppercase letters ' \
                                  'or spaces.'
@@ -44,7 +44,7 @@ class CaesarCipher(CipherI):
 
         return c
 
-    def decode(self, c: CipherText, k: Optional[Key] = None) -> Message:
+    def decrypt(self, c: CipherText, k: Optional[Key] = None) -> Message:
         assert CaesarCipher.is_valid(c), 'Invalid Ciphertext.' \
                                  '\nMessage must be all uppercase letters ' \
                                  'or spaces.'

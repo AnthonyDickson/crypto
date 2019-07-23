@@ -1,0 +1,5 @@
+name: crypto
+dependencies:
+  - pip
+  - pip:
+      - plac

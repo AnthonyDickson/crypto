@@ -7,35 +7,35 @@ CipherText = str
 Message = str
 
 
-class EncoderI:
-    """Interface for an encoder"""
+class EncrypterI:
+    """Interface for an encryption algorithm"""
 
-    def encode(self, m: Message, k: Optional[Key] = None) -> CipherText:
-        """Encode a message.
+    def encrypt(self, m: Message, k: Optional[Key] = None) -> CipherText:
+        """Encrypt a message.
 
-        :param m: The message to encode.
-        :param k: The key to encode the message with. If None then the key
-                  returned by `get_key()` is used.
-        :return: The ciphertext (encoded message).
+        :param m: The message to encrypt.
+        :param k: The key to use for encrypting the message with. If None then
+                  the key returned by `get_key()` is used.
+        :return: The ciphertext (the encrypted message).
         """
         raise NotImplementedError
 
 
-class DecoderI:
-    """Inferface for a decoder."""
+class DecrypterI:
+    """Intferface for a decryption algorithm."""
 
-    def decode(self, c: CipherText, k: Optional[Key] = None) -> Message:
-        """Decode a ciphertext.
+    def decrypt(self, c: CipherText, k: Optional[Key] = None) -> Message:
+        """Decrypt a ciphertext.
 
-        :param c: The ciphertext to decode.
-        :param k: The key to decode the message with. If None then the key
-                  returned by `get_key()` is used.
-        :return: The decoded message.
+        :param c: The ciphertext to decrypt.
+        :param k: The key to use for decrypting the message with. If None then
+                  the key returned by `get_key()` is used.
+        :return: The decrypted message.
         """
         raise NotImplementedError
 
 
-class CipherI(EncoderI, DecoderI, ABC):
+class CipherI(EncrypterI, DecrypterI, ABC):
     """The interface for a cipher."""
 
     def get_key(self) -> Key:
