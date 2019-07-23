@@ -5,3 +5,4 @@ dependencies:
   - pip:
       - codecov
       - plac
+      - pyenchant==2.0.0

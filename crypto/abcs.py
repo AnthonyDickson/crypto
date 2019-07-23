@@ -2,11 +2,11 @@
 
 from abc import ABC, abstractmethod
 
-from crypto.interfaces import EncrypterI, DecrypterI
+from crypto.interfaces import CipherI
 from crypto.types import KeySpace, Key
 
 
-class CipherABC(EncrypterI, DecrypterI, ABC):
+class CipherABC(CipherI, ABC):
     """The abstract base class for a cipher."""
 
     # Override this!

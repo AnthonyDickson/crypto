@@ -1,6 +1,6 @@
 import unittest
 
-from crypto.ciphers.caesar import CaesarCipher, LetterFrequencyAttack
+from crypto.ciphers.caesar import CaesarCipher
 from crypto.types import Key
 
 
@@ -79,20 +79,6 @@ class CaeserCipherTests(unittest.TestCase):
 
         for k in cc.key_space():
             self.assertEqual(D(E(m, k), k), m, msg='The cipher is not symmetric for the key \'%s\'!' % k)
-
-    def test_attack_generates_valid_output(self):
-        m = 'HELLO WORLD'
-        k = Key(5)
-
-        cc = CaesarCipher()
-        c = cc.encrypt(m, k)
-
-        attack = LetterFrequencyAttack()
-        message, key = attack.from_cipher(c)
-
-        self.assertIn(key, CaesarCipher.KEY_SPACE, 'Attack method generated an invalid key \'%s\'.' % key)
-        self.assertTrue(CaesarCipher.is_valid(message), 'Attack method generated an invalid message \'%s\'' % message)
-
 
 if __name__ == '__main__':
     unittest.main()
