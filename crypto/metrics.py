@@ -47,7 +47,7 @@ def ratio_tokens_in_dict(m: Message, language: str = 'en') -> float:
     """
     en_dict = enchant.Dict(language)
     n_in_dictionary = 0
-    tokens = m.split(' ')
+    tokens = m.split()
 
     for token in tokens:
         if en_dict.check(token):
