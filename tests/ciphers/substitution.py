@@ -1,13 +1,12 @@
 from string import ascii_uppercase
 
-from crypto.ciphers.substitution import SubstitutionCipher
-from crypto.types import Key
+from crypto.ciphers.substitution import SubstitutionCipher, SubstitutionCipherKey
 from tests.ciphers.cipher_test_case import CipherTestCase
 
 
 class SubstitutionCipherTests(CipherTestCase):
     raw_key = {key: value for key, value in zip(ascii_uppercase, reversed(ascii_uppercase))}
-    key = Key(''.join([''.join((key, value)) for key, value in zip(ascii_uppercase, reversed(ascii_uppercase))]))
+    key = SubstitutionCipherKey(raw_key)
 
     def test_input_validation(self):
         super(SubstitutionCipherTests, self).input_validation_test(SubstitutionCipher)

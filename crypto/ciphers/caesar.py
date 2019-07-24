@@ -1,37 +1,83 @@
+from random import SystemRandom
 from typing import Optional, Union
 
-from crypto.abcs import CipherABC
-from crypto.types import Key, CipherText, Message
+from crypto.abcs import CipherABC, KeyABC
+from crypto.types import CipherText, Message
+
+
+class CaesarCipherKey(KeyABC):
+    """A key used in the Caesar cipher.
+    This is defined as an integer in the range [0, 25].
+    A key of zero results in no effect, i.e. if k = 0 then E(m, k) = c = D(c, k) = m.
+    """
+
+    def __init__(self, value: int):
+        """Create a Caesar cipher key.
+
+        :param value: The value of the key to use. This value is set to itself modulo 26.
+        """
+        super().__init__(value % 26)
+
+    def __len__(self):
+        return 1
+
+    def __eq__(self, other: Union['CaesarCipherKey', int]):
+        if isinstance(other, CaesarCipherKey):
+            return self.value == other.value
+        else:
+            return self.value == other
+
+    __hash__ = KeyABC.__hash__
+
+    def is_valid(self) -> bool:
+        return self.value in set(self.get_space())
+
+    @staticmethod
+    def get_identity():
+        return CaesarCipherKey(0)
+
+    @staticmethod
+    def generate_random():
+        r = SystemRandom()
+
+        return r.randrange(0, 26)
+
+    @staticmethod
+    def get_space():
+        for i in range(0, 26):
+            yield CaesarCipherKey(i)
+
+    @staticmethod
+    def get_space_size():
+        return 26
 
 
 # noinspection PyMissingConstructor
 class CaesarCipher(CipherABC):
-    KEY_SPACE = set(Key(str(k)) for k in range(0, 26))
-    IDENTITY_KEY = 0
-
-    def __init__(self, key: Optional[int] = None):
+    def __init__(self, key: Optional[CaesarCipherKey] = None):
         if not key:
-            self._key = CaesarCipher.IDENTITY_KEY
+            self._key = CaesarCipherKey.get_identity()
         else:
             self._key = key
 
-    def key(self) -> Key:
-        # The key that is used internally is an integer, but a Key is defined as a string...
-        return Key(str(self._key))
+    @property
+    def key(self) -> CaesarCipherKey:
+        return self._key
 
-    def is_valid(self, x: Union[Message, CipherText]) -> bool:
+    @staticmethod
+    def is_valid(x: Union[Message, CipherText]) -> bool:
         return all((char.isalpha() and char.isupper()) or char.isspace()
                    for char in x)
 
-    def encrypt(self, m: Message, k: Optional[Key] = None) -> CipherText:
+    def encrypt(self, m: Message, k: Optional[CaesarCipherKey] = None) -> CipherText:
         assert self.is_valid(m), 'Invalid message.' \
                                  '\nMessage must be all uppercase letters ' \
                                  'or spaces.'
 
-        if not k:
-            k = self._key
+        if k:
+            k = k.value
         else:
-            k = int(k)
+            k = self.key.value
 
         c = CipherText('')
 
@@ -43,15 +89,15 @@ class CaesarCipher(CipherABC):
 
         return c
 
-    def decrypt(self, c: CipherText, k: Optional[Key] = None) -> Message:
+    def decrypt(self, c: CipherText, k: Optional[CaesarCipherKey] = None) -> Message:
         assert self.is_valid(c), 'Invalid Ciphertext.' \
                                  '\nMessage must be all uppercase letters ' \
                                  'or spaces.'
 
-        if not k:
-            k = self._key
+        if k:
+            k = k.value
         else:
-            k = int(k)
+            k = self.key.value
 
         m = Message('')
 

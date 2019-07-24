@@ -1,10 +1,13 @@
+from collections import Counter
+from string import ascii_uppercase
 from typing import Type, Tuple, Optional
 
 import enchant
 import numpy as np
 
-from crypto.interfaces import BruteForceAttackI, CipherI
-from crypto.types import CipherText, Message, Key
+from crypto.abcs import KeyABC
+from crypto.interfaces import BruteForceAttackI, CipherI, KeyI
+from crypto.types import CipherText, Message
 
 
 class LetterFrequencyAttack(BruteForceAttackI):
@@ -13,6 +16,7 @@ class LetterFrequencyAttack(BruteForceAttackI):
     the English language.
     """
 
+    # noinspection PyMissingConstructor
     def __init__(self):
         # Column vector of letter frequencies from a-z.
         self.letter_frequencies = np.array([[0.08167],
@@ -42,36 +46,30 @@ class LetterFrequencyAttack(BruteForceAttackI):
                                             [0.01974],
                                             [0.00074]])
 
-    def from_cipher(self, c: CipherText, cipher_type: Type[CipherI]) -> Tuple[Message, Optional[Key]]:
+    # TODO: Implement some sort of random guessing alternative for ciphers with large key spaces
+    def from_cipher(self, c: CipherText, cipher_type: Type[CipherI],
+                    key_type: Type[KeyI]) -> Tuple[Message, Optional[KeyI]]:
         cipher = cipher_type()
-
-        # |K| x 26 matrix of letter frequencies
-        letter_frequencies = np.zeros(shape=(len(cipher.key_space()), 26))
+        best_dot_prod = -1
+        the_message = None
+        the_key = None
 
         # Calculate the empirical letter frequencies for the cipher text
         # decrypted with each key in the key space.
-        for k in cipher.key_space():
-            k = int(k)
+        for k in key_type.get_space():
+            m = cipher.decrypt(c, k)
+            letter_frequency_counts = Counter(m)
+            letter_frequency_counts_vec = np.array([letter_frequency_counts[key]
+                                                    for key in ascii_uppercase])
 
-            for char in c:
-                if char.isalpha():
-                    # All characters are uppercase, so treat the first
-                    # uppercase letter as zero.
-                    char_i = (ord(char) - ord('A') - k) % 26
-                    letter_frequencies[k, char_i] += 1
+            dot_prod = letter_frequency_counts_vec.dot(self.letter_frequencies)
 
-        # Convert absolute frequency counts to relative frequencies.
-        letter_frequencies /= len(c)
+            if dot_prod > best_dot_prod:
+                best_dot_prod = dot_prod
+                the_message = m
+                the_key = k
 
-        # The column of the letter frequencies matrix that maximises the dot
-        # product with the reference letter frequencies has most similar
-        # distribution to the reference letter frequencies.
-        # noinspection PyTypeChecker
-        k = Key(str(np.argmax(letter_frequencies.dot(self.letter_frequencies))))
-        # Reconstruct the original message using the guessed key.
-        m: Message = cipher.decrypt(c, Key(k))
-
-        return m, k
+        return the_message, the_key
 
 
 class DictionaryAttack(BruteForceAttackI):
@@ -79,15 +77,17 @@ class DictionaryAttack(BruteForceAttackI):
     a given ciphertext using brute force and a dictionary of the English language.
     """
 
+    # noinspection PyMissingConstructor
     def __init__(self):
         self.dict = enchant.Dict('en')
 
-    def from_cipher(self, c: CipherText, cipher_type: Type[CipherI]) -> Tuple[Message, Optional[Key]]:
+    def from_cipher(self, c: CipherText, cipher_type: Type[CipherI],
+                    key_type: Type[KeyI]) -> Tuple[Message, Optional[KeyI]]:
         cipher = cipher_type()
 
         ratio_tokens_in_dict = dict()
 
-        for k in cipher.key_space():
+        for k in key_type.get_space():
             m = cipher.decrypt(c, k)
 
             # Calculate the ratio of the white-space separated tokens in `m` are actual words.
@@ -101,7 +101,7 @@ class DictionaryAttack(BruteForceAttackI):
             ratio_tokens_in_dict[k] = n_tokens_in_dict / len(tokens)
 
         # The key that is most probable is the one that has highest proportion of actual words in it.
-        k: Key = max(ratio_tokens_in_dict, key=lambda dict_key: ratio_tokens_in_dict[dict_key])
+        k: KeyABC = max(ratio_tokens_in_dict, key=lambda dict_key: ratio_tokens_in_dict[dict_key])
 
         # Reconstruct the original message using the guessed key.
         m: Message = cipher.decrypt(c, k)

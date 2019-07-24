@@ -1,21 +1,21 @@
 import unittest
 
-from crypto.ciphers.caesar import CaesarCipher
-from crypto.types import Key, KeySpace
+from crypto.ciphers.caesar import CaesarCipher, CaesarCipherKey
+from crypto.types import KeySpace
 from tests.ciphers.cipher_test_case import CipherTestCase
 
 
 class CaeserCipherTests(CipherTestCase):
     raw_key = 3
-    key = Key(str(3))
+    key = CaesarCipherKey(3)
 
     def test_input_validation(self):
         super(CaeserCipherTests, self).input_validation_test(CaesarCipher)
 
     def test_keyspace_is_correct(self):
-        expected_key_space = KeySpace({Key(str(i)) for i in range(0, 26)})
+        expected_key_space = KeySpace({CaesarCipherKey(i) for i in range(0, 26)})
 
-        super(CaeserCipherTests, self).keyspace_is_correct_test(CaesarCipher, expected_key_space)
+        super(CaeserCipherTests, self).keyspace_is_correct_test(CaesarCipherKey, expected_key_space)
 
     def test_can_set_key(self):
         super(CaeserCipherTests, self).can_set_key_test(CaesarCipher, self.raw_key, self.key)
