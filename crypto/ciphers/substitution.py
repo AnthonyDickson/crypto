@@ -94,7 +94,8 @@ class SubstitutionCipher(CipherABC):
     def key(self) -> SubstitutionCipherKey:
         return self._key
 
-    def is_valid(self, x: Union[Message, CipherText]) -> bool:
+    @staticmethod
+    def is_valid(x: Union[Message, CipherText]) -> bool:
         """Check if a given message or ciphertext are in a valid format.
 
         :param x: The message or ciphertext to check.

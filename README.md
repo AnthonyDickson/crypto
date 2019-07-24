@@ -18,7 +18,11 @@ See the [roadmap section](#roadmap) for what has been implemented so far.
     $ conda activate crypto
     ```
     
-3.  Run a demo:
+3.  The dictionary-based attack methods use [Enchant](https://abiword.github.io/enchant/), 
+    so make sure this is installed on your computer if you want to run code that uses these 
+    attacks.
+    
+4.  Run a demo:
     ```bash
     $ python samples/caesar_cipher.py
     ```

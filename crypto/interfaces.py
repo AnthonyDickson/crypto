@@ -137,3 +137,16 @@ class BruteForceAttackI(AttackI, ABC):
                  the key.
         """
         raise NotImplementedError
+
+
+class SamplingStrategyI(ABC):
+    """An interface for a strategy of sampling a key space."""
+
+    @abstractmethod
+    def sample(self, key_type: Type[KeyI]) -> Generator[KeyI, None, None]:
+        """Generate samples from a key space.
+
+        :param key_type: The type of key whose key space should be sampled.
+        :return: Yields keys sampled from a key space.
+        """
+        raise NotImplementedError

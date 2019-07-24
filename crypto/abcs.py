@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional, TypeVar
 
-from crypto.interfaces import CipherI, KeyI
+from crypto.interfaces import CipherI, KeyI, BruteForceAttackI, SamplingStrategyI
 
 T = TypeVar('T')
 
@@ -49,3 +49,16 @@ class CipherABC(CipherI, ABC):
     @abstractmethod
     def __init__(self, key: Optional[KeyI] = None):
         raise NotImplementedError
+
+
+class BruteForceAttackABC(BruteForceAttackI, ABC):
+    """Abstract base class representing a brute-force attack."""
+
+    def __init__(self, sampling_strategy: SamplingStrategyI):
+        """Create a new brute-force attack.
+
+        :param sampling_strategy: The strategy to use for sampling key spaces.
+        """
+        super().__init__()
+
+        self.sampling_strategy = sampling_strategy
