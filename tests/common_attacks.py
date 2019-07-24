@@ -2,6 +2,7 @@ import unittest
 
 from crypto.ciphers.caesar import CaesarCipher, CaesarCipherKey
 from crypto.common_attacks import LetterFrequencyAttack, DictionaryAttack
+from crypto.strategies import ExhaustiveSampling
 from crypto.types import Message
 
 
@@ -13,7 +14,7 @@ class TestCommonAttacks(unittest.TestCase):
         cipher = CaesarCipher()
         c = cipher.encrypt(m, k)
 
-        attack = LetterFrequencyAttack()
+        attack = LetterFrequencyAttack(ExhaustiveSampling())
         message, key = attack.from_cipher(c, CaesarCipher, CaesarCipherKey)
 
         self.assertIn(key, CaesarCipherKey.get_space(), 'Attack method generated an invalid key \'%s\'.' % key)
@@ -26,7 +27,7 @@ class TestCommonAttacks(unittest.TestCase):
         cipher = CaesarCipher()
         c = cipher.encrypt(m, k)
 
-        attack = DictionaryAttack()
+        attack = DictionaryAttack(ExhaustiveSampling())
         message, key = attack.from_cipher(c, CaesarCipher, CaesarCipherKey)
 
         self.assertIn(key, CaesarCipherKey.get_space(), 'Attack method generated an invalid key \'%s\'.' % key)
