@@ -40,7 +40,7 @@ class CaesarCipherKey(KeyABC):
     def generate_random():
         r = SystemRandom()
 
-        return r.randrange(0, 26)
+        return CaesarCipherKey(r.randrange(0, 26))
 
     @staticmethod
     def get_space():

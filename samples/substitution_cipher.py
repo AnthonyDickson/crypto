@@ -3,7 +3,7 @@ from typing import Optional
 import plac
 
 from crypto.ciphers.substitution import SubstitutionCipher, SubstitutionCipherKey
-from crypto.common_attacks import LetterFrequencyAttack, DictionaryAttack
+from crypto.common_attacks import LetterFrequencyAttack, DictionaryAttack, LanguageAnalysisAttack
 from crypto.metrics import print_attack_summary
 from crypto.strategies import RandomSampling
 from crypto.types import Message
@@ -46,6 +46,9 @@ def main(n_samples: int = 1000, filename: Optional[str] = None) -> int:
 
     attacker2 = DictionaryAttack(sampling_strategy)
     print_attack_summary(attacker2, message, ciphertext, SubstitutionCipher, SubstitutionCipherKey)
+
+    attacker3 = LanguageAnalysisAttack(sampling_strategy)
+    print_attack_summary(attacker3, message, ciphertext, SubstitutionCipher, SubstitutionCipherKey)
 
     return 0
 
