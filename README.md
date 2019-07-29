@@ -72,8 +72,8 @@ See the [roadmap section](#roadmap) for what has been implemented so far.
         - [ ] Known Plaintext
         - [ ] Bruteforce
 - [ ] Vigenère Cipher
-    - [ ] Encryption
-    - [ ] Decryption
+    - [x] Encryption
+    - [x] Decryption
     - [ ] Attacks
         - [ ] Ciphertext Only
         - [ ] Chosen Plaintext

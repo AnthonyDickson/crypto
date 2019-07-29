@@ -5,7 +5,7 @@ from crypto.types import CipherText, Message
 
 T = TypeVar('T')
 
-
+# TODO: Implement a `in_space(k)` method
 class KeyI(ABC):
     @property
     @abstractmethod
