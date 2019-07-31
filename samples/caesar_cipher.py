@@ -3,6 +3,7 @@ from typing import Optional
 import plac
 
 from crypto.ciphers.caesar import CaesarCipher, CaesarCipherKey
+from crypto.ciphers.utils import is_valid
 from crypto.common_attacks import LetterFrequencyAttack, DictionaryAttack, LanguageAnalysisAttack
 from crypto.metrics import print_attack_summary
 from crypto.strategies import ExhaustiveSampling
@@ -27,7 +28,7 @@ def main(key: Optional[int] = None, filename: Optional[str] = None) -> int:
     key = CaesarCipherKey(key) if key else CaesarCipherKey.generate_random()
     ciphertext = cipher.encrypt(message, key)
 
-    while not CaesarCipher.is_valid(message):
+    while not is_valid(message):
         print('Invalid message format.\n'
               'Messages must be a string of all uppercase letters and spaces.')
         message = input('Enter a message to encrypt: ')

@@ -5,6 +5,7 @@ from crypto.types import CipherText, Message
 
 T = TypeVar('T')
 
+
 # TODO: Implement a `in_space(k)` method
 class KeyI(ABC):
     @property
@@ -100,16 +101,6 @@ class CipherI(EncrypterI, DecrypterI, ABC):
         """Get the key for the encoder.
 
         :return: The key the encoder uses for encoding messages.
-        """
-        raise NotImplementedError
-
-    @staticmethod
-    @abstractmethod
-    def is_valid(x: Union[Message, CipherText]) -> bool:
-        """Check if a given message or ciphertext are in a valid format.
-
-        :param x: The message or ciphertext to check.
-        :return: True if the message or ciphertext is valid, False otherwise.
         """
         raise NotImplementedError
 

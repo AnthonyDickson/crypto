@@ -3,6 +3,7 @@ from typing import Optional
 import plac
 
 from crypto.ciphers.substitution import SubstitutionCipher, SubstitutionCipherKey
+from crypto.ciphers.utils import is_valid
 from crypto.common_attacks import LetterFrequencyAttack, DictionaryAttack, LanguageAnalysisAttack
 from crypto.metrics import print_attack_summary
 from crypto.strategies import RandomSampling
@@ -30,7 +31,7 @@ def main(n_samples: int = 1000, filename: Optional[str] = None) -> int:
 
     ciphertext = cipher.encrypt(message, key)
 
-    while not SubstitutionCipher.is_valid(message):
+    while not is_valid(message):
         print('Invalid message format.\n'
               'Messages must be a string of all uppercase letters and spaces.')
         message = input('Enter a message to encrypt: ')

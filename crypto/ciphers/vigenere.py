@@ -44,7 +44,9 @@ class VigenereCipherKey(KeyABC):
 
 # noinspection PyMissingConstructor
 class VigenereCipher(CipherABC):
-    """The substitution cipher where a lookup table is used to encrypt messages."""
+    """The Vigenere cipher where a string of a certain length is used to
+    encrypt messages.
+    """
 
     def __init__(self, key: Optional[VigenereCipherKey] = None):
         """Create a substitution cipher
