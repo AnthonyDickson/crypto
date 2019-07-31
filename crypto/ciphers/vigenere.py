@@ -28,19 +28,36 @@ class VigenereCipherKey(KeyABC):
 
     @staticmethod
     def generate_random(max_length=20) -> 'VigenereCipherKey':
+        """Generate a random key.
+        For the Vigenere cipher only keys up to a given length are generated.
+
+        :param max_length: The longest key to generate.
+        :return: A randomly generated key.
+        """
         r = SystemRandom()
         return r.choices(list(ascii_uppercase), k=r.randint(1, max_length))
 
     @staticmethod
     def get_space(max_length=20) -> Generator['VigenereCipherKey', None, None]:
+        """Get the key space, or the set of all valid keys.
+        For the Vigenere cipher this is defined up to a maximum key length.
+
+        :param max_length: The longest key to consider.
+        :return: A generator that yields a sequence of valid keys.
+        """
         for r in range(max_length):
             for permutation in itertools.permutations(ascii_uppercase, r):
                 yield VigenereCipherKey(''.join(permutation))
 
     @staticmethod
-    def get_space_size() -> int:
-        # TODO: Implement this.
-        raise NotImplementedError
+    def get_space_size(max_length=20) -> int:
+        """Get the number of elements in the key space.
+        For the Vigenere cipher this is defined up to a maximum key length.
+
+        :param max_length: The longest key to consider.
+        :return: The size of the key space.
+        """
+        return 26 ** max_length  # 26 is the number of letters in the alphabet
 
 
 # noinspection PyMissingConstructor
