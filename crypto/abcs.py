@@ -29,7 +29,10 @@ class KeyABC(KeyI, ABC):
         return len(self.value)
 
     def __eq__(self, other: 'KeyABC') -> bool:
-        return self.value == other.value
+        try:
+            return self.value == other.value
+        except AttributeError:
+            return self.value == other
 
     def __hash__(self):
         return hash(self.value)

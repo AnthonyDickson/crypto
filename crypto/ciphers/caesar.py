@@ -21,12 +21,6 @@ class CaesarCipherKey(KeyABC):
     def __len__(self):
         return 1  # A key is just a single integer.
 
-    def __eq__(self, other: Union['CaesarCipherKey', int]):
-        if isinstance(other, CaesarCipherKey):
-            return self.value == other.value
-        else:
-            return self.value == other
-
     __hash__ = KeyABC.__hash__
 
     @staticmethod
@@ -106,6 +100,6 @@ class CaesarCipher(CipherABC):
             if char.isspace():
                 m += char
             else:
-                m += '%c' % (ord('A') + (ord(char) - ord('A') - k) % 26)
+                m += chr(ord('A') + (ord(char) - ord('A') - k) % 26)
 
         return m

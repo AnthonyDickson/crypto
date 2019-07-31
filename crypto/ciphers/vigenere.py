@@ -11,12 +11,6 @@ class VigenereCipherKey(KeyABC):
     def __init__(self, value: str):
         super().__init__(value)
 
-    def __eq__(self, other: Union['VigenereCipherKey', str]):
-        if isinstance(other, VigenereCipherKey):
-            return self.value == other.value
-        else:
-            return self.value == other
-
     @staticmethod
     def key_space_contains(k: str) -> bool:
         # Any length string that consists of uppercase letter
@@ -107,7 +101,7 @@ class VigenereCipher(CipherABC):
             if char.isspace():
                 c += char
             else:
-                c += '%c' % (ord('A') + (ord(char) + ord(k[i % len(k)])) % 26)
+                c += chr(ord('A') + (ord(char) + ord(k[i % len(k)])) % 26)
                 i += 1
 
         return c
@@ -129,7 +123,7 @@ class VigenereCipher(CipherABC):
             if char.isspace():
                 m += char
             else:
-                m += '%c' % (ord('A') + (ord(char) - ord(k[i % len(k)])) % 26)
+                m += chr(ord('A') + (ord(char) - ord(k[i % len(k)])) % 26)
                 i += 1
 
         return m

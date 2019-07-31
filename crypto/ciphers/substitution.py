@@ -23,12 +23,6 @@ class SubstitutionCipherKey(KeyABC):
     def __hash__(self):
         return sum([hash((k, v)) for k, v in self.value.items()])
 
-    def __eq__(self, other: Union['SubstitutionCipherKey', dict]):
-        if isinstance(other, SubstitutionCipherKey):
-            return self.value == other.value
-        else:
-            return self.value == other
-
     @property
     def value(self) -> dict:
         return self._value
