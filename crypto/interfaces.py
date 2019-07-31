@@ -1,12 +1,9 @@
 from abc import abstractmethod, ABC
-from typing import Tuple, Optional, Type, TypeVar, Generator, Union
+from typing import Tuple, Optional, Type, Generator
 
-from crypto.types import CipherText, Message
-
-T = TypeVar('T')
+from crypto.types import CipherText, Message, T
 
 
-# TODO: Implement a `in_space(k)` method
 class KeyI(ABC):
     @property
     @abstractmethod
@@ -17,9 +14,12 @@ class KeyI(ABC):
         """
         raise NotImplementedError
 
+    @staticmethod
     @abstractmethod
-    def is_valid(self) -> bool:
-        """Check whether or not a key is valid.
+    def key_space_contains(k: T) -> bool:
+        """Check whether or not a key is valid, i.e. it exists in the key space.
+
+        :param k: The key to check.
 
         :return: True if the key is valid, False otherwise.
         """

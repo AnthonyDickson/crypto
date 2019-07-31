@@ -41,11 +41,15 @@ class SubstitutionCipherKey(KeyABC):
         """
         return self._inverse_mappings
 
-    def is_valid(self) -> bool:
-        if not set(self.value.keys()) == set(ascii_uppercase):
+    @staticmethod
+    def key_space_contains(k: dict) -> bool:
+        if not k or not type(k) is dict:
             return False
 
-        if not set(self.value.values()) == set(ascii_uppercase):
+        if not set(k.keys()) == set(ascii_uppercase):
+            return False
+
+        if not set(k.values()) == set(ascii_uppercase):
             return False
 
         return True

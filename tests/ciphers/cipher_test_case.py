@@ -1,9 +1,10 @@
 import unittest
-from typing import Type, Any, Callable, Union, Optional
+from typing import Type, Any, Optional, List
 
 from crypto.abcs import CipherABC
+from crypto.ciphers.utils import is_valid
 from crypto.interfaces import KeyI
-from crypto.types import Message, KeySpace, CipherText
+from crypto.types import Message, CipherText, T
 
 
 # noinspection PyPep8Naming
@@ -24,17 +25,28 @@ class CipherTestCase(unittest.TestCase):
         self.assertRaises(AssertionError, cipher.encrypt, m)
         self.assertRaises(AssertionError, cipher.decrypt, m)
 
-    def keyspace_is_correct_test(self, key_type: Type[KeyI], expected_key_space: Union[KeySpace, Callable]):
+    def keyspace_is_correct_test(self, key_type: Type[KeyI],
+                                 pass_cases: List[T],
+                                 fail_cases: List[T]):
         """Ensure that the key space for a cipher is correct.
 
         :param key_type: The type of key the cipher uses.
-        :param expected_key_space: The expected key space or a generator that generates the key space.
+        :param pass_cases: The values that are expected to exist in the given
+                           type's key space.
+        :param fail_cases: The values that are expected to not exist in the
+                           given key type's key space.
         """
-        self.assertSetEqual(expected_key_space if type(expected_key_space) is set else set(expected_key_space()),
-                            set(key_type.get_space()),
-                            msg='The key space for CaesarCipher is incorrect.')
+        for key in pass_cases:
+            self.assertTrue(key_type.key_space_contains(key))
 
-    def can_set_key_test(self, cipher_type: Type[CipherABC], raw_key: Any, expected_key: KeyI):
+        for key in fail_cases:
+            self.assertFalse(key_type.key_space_contains(key),
+                             msg='The key \'%s\' is not supposed to be in the '
+                                 'key space of a %s.' % (str(key),
+                                                         key_type.__name__))
+
+    def can_set_key_test(self, cipher_type: Type[CipherABC], raw_key: Any,
+                         expected_key: KeyI):
         """Ensure that the key for a cipher can be set correctly.
 
         :param cipher_type: The type of cipher to test.
@@ -59,7 +71,7 @@ class CipherTestCase(unittest.TestCase):
         cipher = cipher_type()
         c = cipher.encrypt(m, key)
 
-        self.assertTrue(cipher.is_valid(c), '\'%s\' is not a valid ciphertext!' % c)
+        self.assertTrue(is_valid(c), '\'%s\' is not a valid ciphertext!' % c)
 
     def generates_valid_plaintext_test(self, cipher_type: Type[CipherABC], key: Optional[KeyI] = None):
         """Ensure that the cipher generates valid messages.
@@ -73,7 +85,7 @@ class CipherTestCase(unittest.TestCase):
         cipher = cipher_type()
         m = cipher.decrypt(c, key)
 
-        self.assertTrue(cipher.is_valid(m), '\'%s\' is not valid plaintext!' % c)
+        self.assertTrue(is_valid(m), '\'%s\' is not valid plaintext!' % c)
 
     def identity_key_test(self, cipher_type: Type[CipherABC]):
         """Ensure that using the identity key results in the same message and

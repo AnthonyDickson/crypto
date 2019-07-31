@@ -1,11 +1,10 @@
 """This module defines any abstract base classes (ABCs)."""
 
 from abc import ABC, abstractmethod
-from typing import Optional, TypeVar
+from typing import Optional
 
 from crypto.interfaces import CipherI, KeyI, BruteForceAttackI, SamplingStrategyI
-
-T = TypeVar('T')
+from crypto.types import T
 
 
 class KeyABC(KeyI, ABC):
@@ -16,6 +15,8 @@ class KeyABC(KeyI, ABC):
 
         :param value: The value of the key, or the key itself.
         """
+        assert self.__class__.key_space_contains(value), 'Invalid key \'%s\'.' % str(value)
+
         self._value = value
 
     def __str__(self) -> str:

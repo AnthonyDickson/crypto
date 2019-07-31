@@ -16,10 +16,10 @@ class CaesarCipherKey(KeyABC):
 
         :param value: The value of the key to use. This value is set to itself modulo 26.
         """
-        super().__init__(value % 26)
+        super().__init__(value)
 
     def __len__(self):
-        return 1
+        return 1  # A key is just a single integer.
 
     def __eq__(self, other: Union['CaesarCipherKey', int]):
         if isinstance(other, CaesarCipherKey):
@@ -29,8 +29,9 @@ class CaesarCipherKey(KeyABC):
 
     __hash__ = KeyABC.__hash__
 
-    def is_valid(self) -> bool:
-        return self.value in set(self.get_space())
+    @staticmethod
+    def key_space_contains(k: int) -> bool:
+        return type(k) is int and k in range(0, 26)
 
     @staticmethod
     def get_identity():

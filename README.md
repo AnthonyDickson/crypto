@@ -4,6 +4,7 @@
 
 This repository contains implementations of some well-known ciphers.
 See the [roadmap section](#roadmap) for what has been implemented so far.
+**Note**: The implementation of these ciphers are not intended for real-world usage!
 
 ## Getting Started
 1.  Set up the python environment using conda:

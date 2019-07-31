@@ -1,5 +1,4 @@
 import itertools
-import math
 from random import SystemRandom
 from string import ascii_uppercase
 from typing import Optional, Union, Generator
@@ -18,8 +17,10 @@ class VigenereCipherKey(KeyABC):
         else:
             return self.value == other
 
-    def is_valid(self) -> bool:
-        return set(self.value) == set(ascii_uppercase)
+    @staticmethod
+    def key_space_contains(k: str) -> bool:
+        # Any length string that consists of uppercase letter
+        return k and type(k) is str and set(k).issubset(set(ascii_uppercase))
 
     @staticmethod
     def get_identity() -> 'VigenereCipherKey':
